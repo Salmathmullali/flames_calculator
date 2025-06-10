@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FLAMES Alphabet Calculator</title>
+  <style>
+    body {
+      background-color: #fbeaff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .calculator {
+      background: #fff0f6;
+      border: 3px solid #ff69b4;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.4);
+      width: 320px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    h2 {
+      color: #ff1493;
+      margin-bottom: 10px;
+      user-select: none;
+    }
+
+    .result {
+      width: 100%;
+      height: 50px;
+      background: #fff;
+      border-radius: 12px;
+      border: 2px solid #ff69b4;
+      box-shadow: inset 0 0 8px #ffb6c1;
+      font-size: 22px;
+      color: #b22222;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      user-select: none;
+      min-height: 50px;
+    }
+
+    .screen {
+      width: 100%;
+      height: 50px;
+      background: #fff;
+      border-radius: 12px;
+      border: 2px solid #ff69b4;
+      box-shadow: inset 0 0 8px #ffb6c1;
+      font-size: 20px;
+      color: #ff1493;
+      padding-left: 10px;
+      display: flex;
+      align-items: center;
+      user-select: none;
+      margin-bottom: 20px;
+      min-height: 50px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(6, 45px);
+      gap: 10px;
+      justify-content: center;
+    }
+
+    button {
+      padding: 12px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: #ff69b4;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+      user-select: none;
+      box-shadow: 0 4px 8px rgba(255, 105, 180, 0.5);
+    }
+
+    button:hover {
+      background-color: #ff85c1;
+    }
+
+    .control-buttons {
+      margin-top: 15px;
+      display: flex;
+      gap: 20px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .control-buttons button {
+      width: 60px;
+      font-weight: 700;
+    }
+
+    .burst-emoji {
+      position: absolute;
+      font-size: 40px;
+      pointer-events: none;
+      animation: burst 1.5s ease-out forwards;
+      opacity: 0;
+      z-index: 999;
+    }
+
+    @keyframes burst {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) scale(2.5);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h2>💖 FLAMES 💖</h2>
+    <div class="result" id="result">💛~❤️~💖~💍~💢~👫</div>
+    <div class="screen" id="inputScreen">Name1: </div>
+    <div class="buttons" id="alphabetButtons"></div>
+    <div class="control-buttons">
+      <button onclick="switchName()">+</button>
+      <button onclick="calculateFlames()">=</button>
+      <button onclick="backspace()">⌫</button>
+      <button onclick="allClear()">AC</button>
+    </div>
+  </div>
+
+  <script>
+    let name1 = '';
+    let name2 = '';
+    let current = 'name1';
+
+    const screen = document.getElementById('inputScreen');
+    const resultDiv = document.getElementById('result');
+    const alphabetButtons = document.getElementById('alphabetButtons');
+    const calculator = document.querySelector('.calculator');
+
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    for (let char of letters) {
+      let btn = document.createElement('button');
+      btn.textContent = char;
+      btn.onclick = () => addLetter(char);
+      alphabetButtons.appendChild(btn);
+    }
+
+    function addLetter(char) {
+      if (current === 'name1') {
+        name1 += char;
+        screen.textContent = `Name1: ${name1}`;
+      } else {
+        name2 += char;
+        screen.textContent = `Name2: ${name2}`;
+      }
+    }
+
+    function switchName() {
+      current = current === 'name1' ? 'name2' : 'name1';
+      screen.textContent = current === 'name1' ? `Name1: ${name1}` : `Name2: ${name2}`;
+    }
+
+    function allClear() {
+      name1 = '';
+      name2 = '';
+      current = 'name1';
+      screen.textContent = 'Name1: ';
+      resultDiv.textContent = '💛~❤️~💖~💍~💢~👫';
+    }
+
+    function backspace() {
+      if (current === 'name1') {
+        name1 = name1.slice(0, -1);
+        screen.textContent = `Name1: ${name1}`;
+      } else {
+        name2 = name2.slice(0, -1);
+        screen.textContent = `Name2: ${name2}`;
+      }
+    }
+
+    function calculateFlames() {
+      if (!name1 || !name2) {
+        resultDiv.textContent = 'Please enter names';
+        return;
+      }
+
+      let n1 = name1.toLowerCase();
+      let n2 = name2.toLowerCase();
+
+      let arr1 = n1.split('');
+      let arr2 = n2.split('');
+
+      arr1.forEach(char => {
+        let index = arr2.indexOf(char);
+        if (index !== -1) {
+          arr2.splice(index, 1);
+          arr1.splice(arr1.indexOf(char), 1);
+        }
+      });
+
+      let count = arr1.length + arr2.length;
+      let flames = ['F', 'L', 'A', 'M', 'E', 'S'];
+
+      while (flames.length > 1) {
+        let split = (count % flames.length) - 1;
+        if (split >= 0) {
+          flames = flames.slice(split + 1).concat(flames.slice(0, split));
+        } else {
+          flames.pop();
+        }
+      }
+
+      const resultMap = {
+        'F': ' Friends 💛',
+        'L': ' In Love ❤️',
+        'A': ' Affectionate 💖',
+        'M': ' Going to Marry 💍',
+        'E': ' Enemies 💢',
+        'S': ' Like Siblings 👫'
+      };
+
+      const emojiSets = {
+        'F': ['💛', '😊', '🎈'],
+        'L': ['❤️', '🥰', '💕'],
+        'A': ['💖', '😘', '🌟'],
+        'M': ['💍', '👰', '🤵'],
+        'E': ['💢', '😡', '🔥'],
+        'S': ['👫', '👧', '👦']
+      };
+
+      const result = flames[0];
+      resultDiv.textContent = `You Are..  ${resultMap[result]}`;
+      triggerBurst(emojiSets[result]);
+    }
+
+    function triggerBurst(emojis) {
+      for (let i = 0; i < 20; i++) {
+        const emoji = document.createElement('div');
+        emoji.className = 'burst-emoji';
+        emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+        const angle = Math.random() * 2 * Math.PI;
+        const radius = 120 + Math.random() * 80;
+
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+
+        emoji.style.setProperty('--x', `${x}px`);
+        emoji.style.setProperty('--y', `${y}px`);
+
+        emoji.style.left = '50%';
+        emoji.style.top = '50%';
+        emoji.style.transform = 'translate(-50%, -50%)';
+
+        calculator.appendChild(emoji);
+
+        setTimeout(() => {
+          emoji.remove();
+        }, 1500);
+      }
+    }
+  </script>
+</body>
+</html>
+
+
