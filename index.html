@@ -6,7 +6,7 @@
   <style>
     /* Animated Gradient Background */
     body {
-      background: linear-gradient(-45deg, #860330, #860330, #860330, #860330);
+      background: linear-gradient(-45deg, #860330, #860330, #860330,#860330);
       background-size: 400% 400%;
       animation: gradientBG 10s ease infinite;
       font-family: 'Courier New', Courier, monospace;
@@ -164,15 +164,17 @@
 
   <script>
     // --- FAST BG EMOJIS ---
-    const bgEmojis = ['💖', '✨', '🔥', '🌸', '💘', '⭐', '🌈', '🍭'];
+    const bgEmojis = ['💖', '✨', '🔥', '🌸', '💘', '⭐', '🌈', '🍭','💮','🦋','🏵️','💌','💋','🧡','🖤','🩷','🤎','💗','❤️‍🔥'];
     function createBackgroundEmoji() {
       const emoji = document.createElement('div');
       emoji.className = 'bg-emoji';
       emoji.textContent = bgEmojis[Math.floor(Math.random() * bgEmojis.length)];
       emoji.style.left = Math.random() * 100 + "vw";
+      emoji.style.right = Math.random() * 100 + "vw";
       emoji.style.top = Math.random() * 100 + "vh";
-      const moveX = (Math.random() - 0.5) * 1200 + "px";
-      const moveY = (Math.random() - 0.5) * 1200 + "px";
+      emoji.style.bottom = Math.random() * 100 + "vh";
+      const moveX = (Math.random() - 0.5) * 1500 + "px";
+      const moveY = (Math.random() - 0.5) * 1500 + "px";
       const duration = 4 + Math.random() * 6 + "s";
       emoji.style.setProperty('--moveX', moveX);
       emoji.style.setProperty('--moveY', moveY);
