@@ -2,151 +2,189 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>FLAMES Alphabet Calculator</title>
+  <title>DYNAMIC PIXEL FLAMES</title>
   <style>
+    /* Animated Gradient Background */
     body {
-      background-color: #fbeaff;
-      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(-45deg, #860330, #860330, #860330, #860330);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
+      font-family: 'Courier New', Courier, monospace;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
       overflow: hidden;
+      position: relative;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* --- MASSIVE FAST BG EMOJIS --- */
+    .bg-emoji {
+      position: absolute;
+      font-size: 90px;
+      z-index: 0;
+      opacity: 0.3;
+      pointer-events: none;
+      filter: blur(1px); /* Slight blur for depth */
+      animation: floatBackground linear infinite;
+    }
+
+    @keyframes floatBackground {
+      from { transform: translate(0, 0) rotate(0deg); }
+      to { transform: translate(var(--moveX), var(--moveY)) rotate(360deg); }
+    }
+
+    /* --- FLOATING CALCULATOR UI --- */
+    .calc-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: bobbing 3s ease-in-out infinite;
+      z-index: 10;
     }
 
     .calculator {
-      background: #fff0f6;
-      border: 3px solid #ff69b4;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.4);
+      background: rgba(255, 240, 246, 0.85); /* Semi-transparent */
+      backdrop-filter: blur(5px); /* Glass effect */
+      border: 4px solid #000;
       width: 320px;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
-      z-index: 1;
+    }
+
+    /* Floating Shadow underneath */
+    .shadow {
+      width: 150px;
+      height: 20px;
+      background: rgba(0,0,0,0.1);
+      border-radius: 50%;
+      margin-top: 20px;
+      animation: shadowPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes bobbing {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    @keyframes shadowPulse {
+      0%, 100% { transform: scale(1); opacity: 0.2; }
+      50% { transform: scale(0.7); opacity: 0.1; }
     }
 
     h2 {
       color: #ff1493;
-      margin-bottom: 10px;
-      user-select: none;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 2px 2px 0px #fff;
     }
 
-    .result {
+    .result, .screen {
       width: 100%;
-      height: 50px;
       background: #fff;
-      border-radius: 12px;
-      border: 2px solid #ff69b4;
-      box-shadow: inset 0 0 8px #ffb6c1;
-      font-size: 22px;
-      color: #b22222;
-      font-weight: 700;
+      border: 3px solid #000;
+      margin-bottom: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 15px;
-      user-select: none;
-      min-height: 50px;
+      box-sizing: border-box;
+      box-shadow: inset 4px 4px 0px #eee;
     }
 
-    .screen {
-      width: 100%;
-      height: 50px;
-      background: #fff;
-      border-radius: 12px;
-      border: 2px solid #ff69b4;
-      box-shadow: inset 0 0 8px #ffb6c1;
-      font-size: 20px;
-      color: #ff1493;
-      padding-left: 10px;
-      display: flex;
-      align-items: center;
-      user-select: none;
-      margin-bottom: 20px;
-      min-height: 50px;
-    }
+    .result { height: 60px; font-size: 18px; color: #b22222; font-weight: bold; }
+    .screen { height: 45px; font-size: 16px; color: #ff1493; justify-content: flex-start; padding-left: 10px; }
 
     .buttons {
       display: grid;
-      grid-template-columns: repeat(6, 45px);
-      gap: 10px;
-      justify-content: center;
+      grid-template-columns: repeat(6, 42px);
+      gap: 8px;
     }
 
     button {
-      padding: 12px;
-      font-size: 18px;
-      border: none;
-      border-radius: 10px;
+      font-family: 'Courier New', monospace;
+      padding: 10px 0;
+      font-size: 16px;
+      font-weight: bold;
+      border: 3px solid #000;
       background-color: #ff69b4;
       color: white;
       cursor: pointer;
-      transition: background-color 0.25s ease;
-      user-select: none;
-      box-shadow: 0 4px 8px rgba(255, 105, 180, 0.5);
+      box-shadow: 0 4px 0 #000;
+      position: relative;
     }
 
-    button:hover {
-      background-color: #ff85c1;
-    }
+    button:hover { background-color: #ff85c1; }
+    button:active { top: 3px; box-shadow: 0 1px 0 #000; }
 
-    .control-buttons {
-      margin-top: 15px;
-      display: flex;
-      gap: 20px;
-      width: 100%;
-      justify-content: center;
-    }
-
-    .control-buttons button {
-      width: 60px;
-      font-weight: 700;
-    }
+    .control-buttons { margin-top: 15px; display: flex; gap: 10px; width: 100%; }
+    .control-buttons button { flex: 1; background-color: #ff1493; }
 
     .burst-emoji {
       position: absolute;
-      font-size: 40px;
+      font-size: 60px;
       pointer-events: none;
-      animation: burst 1.5s ease-out forwards;
-      opacity: 0;
+      animation: burst 1s steps(8) forwards;
       z-index: 999;
     }
 
     @keyframes burst {
-      0% {
-        opacity: 1;
-        transform: translate(0, 0) scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(var(--x), var(--y)) scale(2.5);
-      }
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(2.5); }
     }
   </style>
 </head>
 <body>
-  <div class="calculator">
-    <h2>💖 FLAMES 💖</h2>
-    <div class="result" id="result">💛~❤️~💖~💍~💢~👫</div>
-    <div class="screen" id="inputScreen">Name1: </div>
-    <div class="buttons" id="alphabetButtons"></div>
-    <div class="control-buttons">
-      <button onclick="switchName()">+</button>
-      <button onclick="calculateFlames()">=</button>
-      <button onclick="backspace()">⌫</button>
-      <button onclick="allClear()">AC</button>
+
+  <div class="calc-container">
+    <div class="calculator">
+      <h2>[ FLAMES ]</h2>
+      <div class="result" id="result">💛 ❤️ 💖 💍 💢 👫</div>
+      <div class="screen" id="inputScreen">Name1: </div>
+      <div class="buttons" id="alphabetButtons"></div>
+      <div class="control-buttons">
+        <button onclick="switchName()">NEXT</button>
+        <button onclick="calculateFlames()" style="background:#4CAF50;">GO</button>
+        <button onclick="backspace()">DEL</button>
+        <button onclick="allClear()">AC</button>
+      </div>
     </div>
+    <div class="shadow"></div>
   </div>
 
   <script>
-    let name1 = '';
-    let name2 = '';
-    let current = 'name1';
+    // --- FAST BG EMOJIS ---
+    const bgEmojis = ['💖', '✨', '🔥', '🌸', '💘', '⭐', '🌈', '🍭'];
+    function createBackgroundEmoji() {
+      const emoji = document.createElement('div');
+      emoji.className = 'bg-emoji';
+      emoji.textContent = bgEmojis[Math.floor(Math.random() * bgEmojis.length)];
+      emoji.style.left = Math.random() * 100 + "vw";
+      emoji.style.top = Math.random() * 100 + "vh";
+      const moveX = (Math.random() - 0.5) * 1200 + "px";
+      const moveY = (Math.random() - 0.5) * 1200 + "px";
+      const duration = 4 + Math.random() * 6 + "s";
+      emoji.style.setProperty('--moveX', moveX);
+      emoji.style.setProperty('--moveY', moveY);
+      emoji.style.animationDuration = duration;
+      document.body.appendChild(emoji);
+      setTimeout(() => { emoji.remove(); createBackgroundEmoji(); }, parseFloat(duration) * 1000);
+    }
 
+    for(let i=0; i<10; i++) { createBackgroundEmoji(); }
+
+    // --- CALCULATOR LOGIC ---
+    let name1 = ''; let name2 = ''; let current = 'name1';
     const screen = document.getElementById('inputScreen');
     const resultDiv = document.getElementById('result');
     const alphabetButtons = document.getElementById('alphabetButtons');
@@ -161,13 +199,8 @@
     }
 
     function addLetter(char) {
-      if (current === 'name1') {
-        name1 += char;
-        screen.textContent = `Name1: ${name1}`;
-      } else {
-        name2 += char;
-        screen.textContent = `Name2: ${name2}`;
-      }
+      if (current === 'name1') { name1 += char; screen.textContent = `Name1: ${name1}`; } 
+      else { name2 += char; screen.textContent = `Name2: ${name2}`; }
     }
 
     function switchName() {
@@ -176,75 +209,35 @@
     }
 
     function allClear() {
-      name1 = '';
-      name2 = '';
-      current = 'name1';
+      name1 = ''; name2 = ''; current = 'name1';
       screen.textContent = 'Name1: ';
-      resultDiv.textContent = '💛~❤️~💖~💍~💢~👫';
+      resultDiv.textContent = '💛 ❤️ 💖 💍 💢 👫';
     }
 
     function backspace() {
-      if (current === 'name1') {
-        name1 = name1.slice(0, -1);
-        screen.textContent = `Name1: ${name1}`;
-      } else {
-        name2 = name2.slice(0, -1);
-        screen.textContent = `Name2: ${name2}`;
-      }
+      if (current === 'name1') { name1 = name1.slice(0, -1); screen.textContent = `Name1: ${name1}`; } 
+      else { name2 = name2.slice(0, -1); screen.textContent = `Name2: ${name2}`; }
     }
 
     function calculateFlames() {
-      if (!name1 || !name2) {
-        resultDiv.textContent = 'Please enter names';
-        return;
-      }
-
-      let n1 = name1.toLowerCase();
-      let n2 = name2.toLowerCase();
-
-      let arr1 = n1.split('');
-      let arr2 = n2.split('');
-
+      if (!name1 || !name2) { resultDiv.textContent = 'ENTER NAMES'; return; }
+      let n1 = name1.toLowerCase(), n2 = name2.toLowerCase();
+      let arr1 = n1.split(''), arr2 = n2.split('');
       arr1.forEach(char => {
         let index = arr2.indexOf(char);
-        if (index !== -1) {
-          arr2.splice(index, 1);
-          arr1.splice(arr1.indexOf(char), 1);
-        }
+        if (index !== -1) { arr2.splice(index, 1); arr1.splice(arr1.indexOf(char), 1); }
       });
-
       let count = arr1.length + arr2.length;
       let flames = ['F', 'L', 'A', 'M', 'E', 'S'];
-
       while (flames.length > 1) {
         let split = (count % flames.length) - 1;
-        if (split >= 0) {
-          flames = flames.slice(split + 1).concat(flames.slice(0, split));
-        } else {
-          flames.pop();
-        }
+        if (split >= 0) flames = flames.slice(split + 1).concat(flames.slice(0, split));
+        else flames.pop();
       }
-
-      const resultMap = {
-        'F': ' Friends 💛',
-        'L': ' In Love ❤️',
-        'A': ' Affectionate 💖',
-        'M': ' Going to Marry 💍',
-        'E': ' Enemies 💢',
-        'S': ' Like Siblings 👫'
-      };
-
-      const emojiSets = {
-        'F': ['💛', '😊', '🎈'],
-        'L': ['❤️', '🥰', '💕'],
-        'A': ['💖', '😘', '🌟'],
-        'M': ['💍', '👰', '🤵'],
-        'E': ['💢', '😡', '🔥'],
-        'S': ['👫', '👧', '👦']
-      };
-
+      const resultMap = { 'F': 'Friends 💛', 'L': 'In Love ❤️', 'A': 'Affection 💖', 'M': 'Marriage 💍', 'E': 'Enemies 💢', 'S': 'Siblings 👫' };
+      const emojiSets = { 'F': ['💛', '😊'], 'L': ['❤️', '🥰'], 'A': ['💖', '😘'], 'M': ['💍', '👰'], 'E': ['💢', '😡'], 'S': ['👫', '👦'] };
       const result = flames[0];
-      resultDiv.textContent = `You Are..  ${resultMap[result]}`;
+      resultDiv.textContent = resultMap[result];
       triggerBurst(emojiSets[result]);
     }
 
@@ -253,29 +246,18 @@
         const emoji = document.createElement('div');
         emoji.className = 'burst-emoji';
         emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-
         const angle = Math.random() * 2 * Math.PI;
-        const radius = 120 + Math.random() * 80;
-
-        const x = Math.cos(angle) * radius;
-        const y = Math.sin(angle) * radius;
-
-        emoji.style.setProperty('--x', `${x}px`);
-        emoji.style.setProperty('--y', `${y}px`);
-
+        const radius = 150 + Math.random() * 100;
+        const x = Math.cos(angle) * radius + "px";
+        const y = Math.sin(angle) * radius + "px";
+        emoji.style.setProperty('--x', x);
+        emoji.style.setProperty('--y', y);
         emoji.style.left = '50%';
         emoji.style.top = '50%';
-        emoji.style.transform = 'translate(-50%, -50%)';
-
         calculator.appendChild(emoji);
-
-        setTimeout(() => {
-          emoji.remove();
-        }, 1500);
+        setTimeout(() => emoji.remove(), 1000);
       }
     }
   </script>
 </body>
 </html>
-
-
